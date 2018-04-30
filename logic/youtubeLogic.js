@@ -69,10 +69,12 @@ function playback(msg, link){
   msg.member.voiceChannel.join()
   .then(connection => {
     const dispatcher = connection.playStream(stream, streamOptions);
+    dispatcher.on('end', endmsg => {
+      setTimeout(connection.disconnect(), 1000);
+    })
   })
   .catch(console.error);
 }
-
 
 module.exports = {
   search : search
