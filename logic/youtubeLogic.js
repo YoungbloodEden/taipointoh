@@ -20,7 +20,8 @@ function search(args, msg, client){
     } else if (response.items.length == 0){
       msg.reply("I wasn't able to find anything by searching that.");
     } else if (response.items.length == 1){
-      msg.reply("Here's what I found. Playing it now! \`\`\`ml\n" + `${response.items[0].snippet.title}`+"\`\`\`")
+      msg.reply("Here's what I found. Playing it now! \`\`\`ml\n" + `${response.items[0].snippet.title}`+"\`\`\`");
+      playback(msg, response.items[0].id.videoId, client);
     }
     responseCollector = new Discord.MessageCollector(msg.channel, m => m.author.id == msg.author.id, {maxMatches: 1, time: 10000});
     responseCollector.on('collect', msg => {
@@ -28,7 +29,7 @@ function search(args, msg, client){
       switch(newResponse){
           case '1':
             msg.reply("\`\`\`ml\nPlaying "+`${response.items[0].snippet.title}` + "\`\`\`");
-            playback(msg, response.items[0].id.videoId);
+            playback(msg, response.items[0].id.videoId, client);
             break;
 
           case '2':
@@ -36,7 +37,7 @@ function search(args, msg, client){
               msg.reply("Not a valid choice!")
             }
             msg.reply("\`\`\`ml\nPlaying "+`${response.items[1].snippet.title}` + "\`\`\`");
-            playback(msg, response.items[1].id.videoId);
+            playback(msg, response.items[1].id.videoId, client);
             break;
 
           case '3':
@@ -44,7 +45,7 @@ function search(args, msg, client){
               msg.reply("Not a valid choice!");
             }
               msg.reply("\`\`\`ml\nPlaying "+`${response.items[2].snippet.title}` + "\`\`\`");
-              playback(msg, response.items[2].id.videoId);
+              playback(msg, response.items[2].id.videoId, client);
             break;
 
           default:
@@ -55,7 +56,7 @@ function search(args, msg, client){
     })
   }
 
-function playback(msg, link){
+function playback(msg, link, client){
 
   const streamOptions = { seek: 0, volume: .5 };
   var stream = ytdl(`https://www.youtube.com/watch?v=${link}`, {filter: "audioonly"});
@@ -64,8 +65,8 @@ function playback(msg, link){
   .then(connection => {
     const dispatcher = connection.playStream(stream, streamOptions);
     dispatcher.on('end', endmsg => {
-      if (connection){
-        setTimeout(connection.disconnect(), 1000);
+      if (client.voiceConnections){
+        setTimeout(client.voiceConnections.first().disconnect(), 1000);
       }
     })
   })
