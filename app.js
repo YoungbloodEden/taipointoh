@@ -9,7 +9,6 @@ var himself = false;
 const botclient = new Discord.Client();
 botclient.on('ready', () => {
   console.log(`Ready to rock, hit me with commands.`);
-  // console.log(botclient);
   var himself = botclient.user;
 });
 

@@ -28,8 +28,6 @@ function commandCheck(content, cmd, msg, client){
     default:
       break;
   }
-  console.log(cmd);
-  console.log(msg);
 }
 
 module.exports = {
