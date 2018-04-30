@@ -67,6 +67,8 @@ function playback(msg, link, client){
     dispatcher.on('end', endmsg => {
       if (client.voiceConnections){
         setTimeout(client.voiceConnections.first().disconnect(), 1000);
+      } else {
+        return;
       }
     })
   })
