@@ -24,7 +24,7 @@ botclient.on('message', msg => {
     console.log("Ignoring my own messages.");
     return;
   }
-  core.core(msg);
+  core.core(msg, botclient);
 })
 
 botclient.login(config.nfo.token);
