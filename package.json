@@ -1,0 +1,27 @@
+{
+  "name": "taipointoh",
+  "version": "1.0.0",
+  "description": "Tai 2.0",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "erlpack": "^0.1.2",
+    "libsodium-wrappers": "^0.7.3",
+    "node-opus": "^0.2.7",
+    "uws": "^9.148.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Splitbreed/taipointoh.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Splitbreed/taipointoh/issues"
+  },
+  "homepage": "https://github.com/Splitbreed/taipointoh#readme"
+}
