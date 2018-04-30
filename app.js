@@ -15,13 +15,12 @@ botclient.on('message', msg => {
   // console.log(msg.author);
   if (msg.author == botclient.user){
     himself = true;
+  } else {
+    himself = false;
   }
   if (himself){
-    console.log("Can't reply to myself");
+    console.log("Ignoring my own messages.");
     return;
-  }
-  if (msg.content == 'hello new tai') {
-    msg.reply('Hello.');
   }
 })
 
