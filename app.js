@@ -1,8 +1,10 @@
 var Discord = require('discord.js'),
-    config  = require('./config.json');
+    config  = require('./config.json'),
+    core    = require('./logic/coreLogic.js');
 
 
 var himself = false;
+
 
 const botclient = new Discord.Client();
 botclient.on('ready', () => {
@@ -22,6 +24,7 @@ botclient.on('message', msg => {
     console.log("Ignoring my own messages.");
     return;
   }
+  core.core(msg);
 })
 
 botclient.login(config.nfo.token);
