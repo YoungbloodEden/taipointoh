@@ -64,7 +64,9 @@ function playback(msg, link){
   .then(connection => {
     const dispatcher = connection.playStream(stream, streamOptions);
     dispatcher.on('end', endmsg => {
-      setTimeout(connection.disconnect(), 1000);
+      if (connection){
+        setTimeout(connection.disconnect(), 1000);
+      }
     })
   })
   .catch(console.error);
