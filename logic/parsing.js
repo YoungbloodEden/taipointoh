@@ -5,7 +5,8 @@ var message, command;
 
 
 var keys = {
-  yt : "yt"
+  yt : "yt",
+  volume : "volume"
 }
 
 var keysLength = (Object.keys(keys).length);
@@ -24,6 +25,11 @@ function commandCheck(content, cmd, msg, client){
       content.splice(0,1);
       content = content.join(' ');
       youTube.search(content, msg, client);
+      break;
+    case "volume":
+      content.splice(0,1);
+      content = content.join('');
+      youTube.volume(content, msg, client);
       break;
     default:
       break;

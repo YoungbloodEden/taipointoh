@@ -4,6 +4,24 @@ var ytdl    = require('ytdl-core'),
     Discord = require ('discord.js');
 
 
+var streamOptions = { seek: 0, volume: 1 };
+
+function volume(content, msg, client){
+  var v = parseInt(content);
+  if (v > 100){
+    msg.channel.send("I can't put the volume that high! (1-100)");
+  } else if (v < 1){
+    msg.channel.send("I can't put the volume that low! (1-100)");
+  } else if (v >= 1 && v <= 100){
+    v = parseFloat((v/100).toFixed(2));
+    streamOptions.volume = v;
+    msg.channel.send("Volume has been set to " + (v*100) + "%");
+    console.log(streamOptions);
+  } else {
+    msg.channel.send("That's not a valid volume! (1-100)");
+  }
+}
+
 function search(args, msg, client){
 
   if (!args) { return };
@@ -23,12 +41,12 @@ function search(args, msg, client){
       msg.reply("Here's what I found. Playing it now! \`\`\`ml\n" + `${response.items[0].snippet.title}`+"\`\`\`");
       playback(msg, response.items[0].id.videoId, client);
     }
-    responseCollector = new Discord.MessageCollector(msg.channel, m => m.author.id == msg.author.id, {maxMatches: 1, time: 10000});
+    responseCollector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {maxMatches: 1, time: 10000});
     responseCollector.on('collect', msg => {
       var newResponse = msg.content;
       switch(newResponse){
           case '1':
-            msg.reply("\`\`\`ml\nPlaying "+`${response.items[0].snippet.title}` + "\`\`\`");
+            msg.reply(`\`\`\`ml\nOption 1. Chosen  \"${response.items[0].snippet.title}\"\`\`\``);
             playback(msg, response.items[0].id.videoId, client);
             break;
 
@@ -36,7 +54,7 @@ function search(args, msg, client){
             if (!`${response.items[1]}`){
               msg.reply("Not a valid choice!")
             }
-            msg.reply("\`\`\`ml\nPlaying "+`${response.items[1].snippet.title}` + "\`\`\`");
+            msg.reply(`\`\`\`ml\nOption 2. Chosen \"${response.items[1].snippet.title}\"\`\`\``);
             playback(msg, response.items[1].id.videoId, client);
             break;
 
@@ -44,7 +62,7 @@ function search(args, msg, client){
             if (!`${response.items[2]}`){
               msg.reply("Not a valid choice!");
             }
-              msg.reply("\`\`\`ml\nPlaying "+`${response.items[2].snippet.title}` + "\`\`\`");
+              msg.reply(`\`\`\`ml\nOption 3. Chosen  \"${response.items[2].snippet.title}\"\`\`\``);
               playback(msg, response.items[2].id.videoId, client);
             break;
 
@@ -58,25 +76,33 @@ function search(args, msg, client){
 
 function playback(msg, link, client){
 
-  const streamOptions = { seek: 0, volume: .5 };
   var stream = ytdl(`https://www.youtube.com/watch?v=${link}`, {filter: "audioonly"});
 
   msg.member.voiceChannel.join()
   .then(connection => {
     const dispatcher = connection.playStream(stream, streamOptions);
     dispatcher.on('end', endmsg => {
-      console.log(connection);
-      // if (client.voiceConnections){
-      //   console.log("I'm trying to disconnect")
-      //   setTimeout(client.voiceConnections.first().disconnect(), 1000);
-      // } else {
-      //   return;
-      // }
+      disconn(msg, client, connection);
     })
   })
   .catch(console.error);
 }
 
+function disconn(msg, client, connection){
+  if (connection){
+    console.log(connection.disconnect());
+    console.log("+++++++++++++++");
+    console.log(client.voiceConnections.first());
+    // setTimeout(client.voiceConnections.first().disconnect(), 1000);
+  } else {
+    if (client.voiceConnections.first()){
+      client.voiceConnections.first().disconnect();
+    }
+  }
+}
+
 module.exports = {
-  search : search
+  search : search,
+  disconn : disconn,
+  volume: volume
 }

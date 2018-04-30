@@ -1,5 +1,6 @@
 var config = require('../config.json');
 var parse = require ('./parsing.js');
+var youTube = require('./youtubeLogic.js');
 
 
 var conn;
@@ -7,7 +8,7 @@ var conn;
 function core(msg, client){
   if (msg.content == `${config.nfo.prefix}disc`){
     if (client.voiceConnections){
-      client.voiceConnections.first().disconnect();
+      youTube.disconn(msg, client);
       console.log("Disconnected due to disc command");
     }
   } else {
