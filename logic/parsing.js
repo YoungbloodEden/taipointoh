@@ -1,7 +1,7 @@
 var config = require('../config.json');
 
-var prefixUsed;
-var split;
+var message, command;
+
 
 var keys = {
   yt : "yt"
@@ -10,15 +10,16 @@ var keys = {
 var keysLength = (Object.keys(keys).length);
 
 function prefixCheck(msg){
-  split = msg.content.split(" ");
-  console.log(split);
-  if (split[0][0] == `${config.nfo.prefix}`){
-    commandCheck(msg);
+  message = msg.content.split(" ");
+  if (message[0].charAt(0) == `${config.nfo.prefix}`){
+    command = message[0].substr(1);
+    commandCheck(message, command);
   }
 }
 
-function commandCheck(msg){
-  console.log("got to command check")
+function commandCheck(msg, cmd){
+  console.log(cmd);
+  console.log(msg);
 }
 
 module.exports = {
