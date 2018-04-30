@@ -66,6 +66,7 @@ function playback(msg, link, client){
     const dispatcher = connection.playStream(stream, streamOptions);
     dispatcher.on('end', endmsg => {
       if (client.voiceConnections){
+        console.log("I'm trying to disconnect")
         setTimeout(client.voiceConnections.first().disconnect(), 1000);
       } else {
         return;
