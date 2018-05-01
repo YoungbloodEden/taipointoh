@@ -1,7 +1,8 @@
-var ytdl    = require('ytdl-core'),
+var ytdl    = require ('ytdl-core'),
     request = require ('request'),
     config  = require ('../config.json'),
-    Discord = require ('discord.js');
+    Discord = require ('discord.js'),
+    parsing = require ('./parsing.js');
 
 
 var streamOptions = { seek: 0, volume: 1 },
@@ -125,13 +126,17 @@ function playback(msg, client){
 }
 
 function disconn(msg, client, connection){
-  if(client.voiceConnections.first()){
-    client.voiceConnections.first().disconnect();
+  if (queue.length >= 2){
+    parsing.clearConfirmation(msg, client);
   } else {
-    msg.reply("Nothing to disconnect from.");
+    if(client.voiceConnections.first()){
+      client.voiceConnections.first().disconnect();
+    } else {
+      msg.reply("Nothing to disconnect from.");
+    }
+    queue = [];
+    names = [];
   }
-  queue = [];
-  names = [];
 }
 
 
