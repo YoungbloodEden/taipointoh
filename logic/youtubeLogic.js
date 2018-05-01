@@ -127,7 +127,7 @@ function playback(msg, client){
 
 function disconn(msg, client, connection){
   if (queue.length >= 2){
-    parsing.clearConfirmation(msg, client);
+    clearConfirmation(msg, client);
   } else {
     if(client.voiceConnections.first()){
       client.voiceConnections.first().disconnect();
@@ -204,6 +204,21 @@ function queueMoveToFront(content, msg, client){
     names.splice(1,0,names.splice(m,1));
   }
 }
+
+function clearConfirmation(msg, client){
+  msg.reply("You have a currently active queue. Disconnecting will clear it, are you sure you want to disconnect? (Y to confirm)");
+  resCollector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {maxMatches: 1, time: 10000});
+  resCollcetor.on('collect', collected =>{
+    var resContent = collected.content.toLowerCase();
+    if (resContent == "y" || resContent == "yes"){
+      client.voiceConnections.first().disconnect();
+    } else {
+      msg.reply("Cancelling disconnect!");
+      return;
+    }
+  })
+}
+
 
 module.exports = {
   search : search,
