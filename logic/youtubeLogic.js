@@ -107,15 +107,11 @@ function playback(msg, client){
   .then(connection => {
     streamComplete = false;
     dispatcher = connection.playStream(stream, streamOptions);
-    console.log(dispatcher.destroyed);
     dispatcher.on('end', endmsg => {
       streamComplete = true;
-      console.log(dispatcher.destroyed);
       if (queue.length == 1){
         queueRemove();
         disconn(msg, client, connection);
-        console.log(dispatcher.destroyed);
-        console.log(dispatcher.paused);
       } else if (queue.length > 1){
         queueRemove();
         playback(msg, client);
@@ -193,11 +189,11 @@ function queueMoveToFront(content, msg, client){
   }
   if (m > queue.length){
     msg.reply("Not a valid queue position.");
-  } else (
-    msg.reply(`Moved ${names[m-1]} to the front of the queue.`);
-    queue.splice(0,0,queue.splice(m-1,1));
-    names.splice(0,0,names.splice(m-1,1));
-  )
+  } else {
+    msg.reply(`Moved ${names[m]} to the front of the queue.`);
+    queue.splice(1,0,queue.splice(m,1));
+    names.splice(1,0,names.splice(m,1));
+  }
 }
 
 module.exports = {
