@@ -128,6 +128,7 @@ function disconn(msg, client, connection){
     msg.reply("Nothing to disconnect from.");
   }
   queue = [];
+  names = [];
 }
 
 
