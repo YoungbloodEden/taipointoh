@@ -1,4 +1,5 @@
 var disp;
+var Discord = require('discord.js');
 
 
 function menu(msg, client){
