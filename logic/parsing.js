@@ -32,9 +32,36 @@ function commandCheck(content, cmd, msg, client){
       }
     break;
 
+    case "queue":
+      youTube.viewQueue(msg, client);
+    break;
+
     case "help":
       miscLog.help(msg, client);
     break;
+
+    case "skip":
+      youTube.youtubeSkip(msg, client);
+    break;
+
+    case "qdel":
+    content.splice(0,1);
+    if (content.length < 1){
+      msg.reply("Choose a song to remove by its queue position.");
+    } else {
+      content = content.join('');
+      youTube.queueDeleteAt(content, msg, client);
+    }
+    break;
+
+    case "qjump":
+    content.splice(0,1);
+    if(content.length < 1){
+      msg.reply("Choose a song to jump forward by its queue position.");
+    } else {
+      content = content.join('');
+      youTube.queueMoveToFront(content, msg, client);
+    }
 
     default:
     break;

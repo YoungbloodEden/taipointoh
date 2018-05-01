@@ -5,7 +5,10 @@ var ytdl    = require('ytdl-core'),
 
 
 var streamOptions = { seek: 0, volume: 1 },
-    dispatcher;
+    dispatcher,
+    queue = [],
+    names = [],
+    streamComplete = true;
 
 function vol(content, msg, client){
   var v = parseInt(content);
@@ -16,7 +19,7 @@ function vol(content, msg, client){
   } else if (v >= 1 && v <= 100){
     v = parseFloat((v/100).toFixed(2));
     streamOptions.volume = v;
-    if (dispatcher.volume){
+    if (streamComplete == false){
       dispatcher.setVolume(v);
     }
     msg.channel.send("Volume has been set to " + (v*100) + "%");
@@ -41,12 +44,14 @@ function search(args, msg, client){
 
     if (response.items.length > 1 && response.items.length >= 3){
       msg.reply("I found a few different results. Here's the top 3. Which were you looking for? \`\`\`ml\n 1. " +  `${response.items[0].snippet.title}` + " \n 2. " + `${response.items[1].snippet.title}` + " \n 3. " + `${response.items[2].snippet.title}` + "\`\`\`")
-    } else if (reponse.items.length > 1 && response.items.length < 3){
+    } else if (response.items.length > 1 && response.items.length < 3){
       msg.reply("I found a couple different results. Here they are Which were you looking for? \`\`\`ml\n 1. " +  `${response.items[0].snippet.title}` + " \n 2. " + `${response.items[1].snippet.title}` + "\`\`\`")
     } else if (response.items.length == 0){
       msg.reply("I wasn't able to find anything by searching that.");
     } else if (response.items.length == 1){
-      msg.reply("Here's what I found. Playing it now! \`\`\`ml\n" + `${response.items[0].snippet.title}`+"\`\`\`");
+      msg.reply("Here's what I found. Adding automatically.\`\`\`ml\n" + `${response.items[0].snippet.title}`+"\`\`\`");
+      pushNames(response.items[0].snippet.title);
+      pushQueue(response.items[0].id.videoId);
       playback(msg, response.items[0].id.videoId, client);
     }
     responseCollector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {maxMatches: 1, time: 10000});
@@ -55,7 +60,11 @@ function search(args, msg, client){
       switch(newResponse){
           case '1':
             msg.reply(`\`\`\`ml\nOption 1. Chosen  \"${response.items[0].snippet.title}\"\`\`\``);
-            playback(msg, response.items[0].id.videoId, client);
+            pushNames(response.items[0].snippet.title);
+            pushQueue(response.items[0].id.videoId)
+            if(streamComplete){
+              playback(msg, client);
+            }
             break;
 
           case '2':
@@ -63,7 +72,11 @@ function search(args, msg, client){
               msg.reply("Not a valid choice!")
             }
             msg.reply(`\`\`\`ml\nOption 2. Chosen \"${response.items[1].snippet.title}\"\`\`\``);
-            playback(msg, response.items[1].id.videoId, client);
+            pushNames(response.items[1].snippet.title);
+            pushQueue(response.items[1].id.videoId)
+            if(streamComplete){
+              playback(msg, client);
+            }
             break;
 
           case '3':
@@ -71,7 +84,11 @@ function search(args, msg, client){
               msg.reply("Not a valid choice!");
             }
               msg.reply(`\`\`\`ml\nOption 3. Chosen  \"${response.items[2].snippet.title}\"\`\`\``);
-              playback(msg, response.items[2].id.videoId, client);
+              pushNames(response.items[0].snippet.title);
+              pushQueue(response.items[2].id.videoId);
+              if(streamComplete){
+                playback(msg, client);
+              }
             break;
 
           default:
@@ -82,37 +99,114 @@ function search(args, msg, client){
     })
   }
 
-function playback(msg, link, client){
+function playback(msg, client){
 
-  var stream = ytdl(`https://www.youtube.com/watch?v=${link}`, {filter: "audioonly"});
+  var stream = ytdl(`https://www.youtube.com/watch?v=${queue[0]}`, {filter: "audioonly"});
 
   msg.member.voiceChannel.join()
   .then(connection => {
+    streamComplete = false;
     dispatcher = connection.playStream(stream, streamOptions);
-    console.log(dispatcher.volume, "volllllume");
+    console.log(dispatcher.destroyed);
     dispatcher.on('end', endmsg => {
-      disconn(msg, client, connection);
+      streamComplete = true;
+      console.log(dispatcher.destroyed);
+      if (queue.length == 1){
+        queueRemove();
+        disconn(msg, client, connection);
+        console.log(dispatcher.destroyed);
+        console.log(dispatcher.paused);
+      } else if (queue.length > 1){
+        queueRemove();
+        playback(msg, client);
+      }
     })
   })
   .catch(console.error);
 }
 
 function disconn(msg, client, connection){
-  if (connection){
-    console.log(connection.disconnect());
-    console.log("+++++++++++++++");
-    console.log(client.voiceConnections.first());
-    // setTimeout(client.voiceConnections.first().disconnect(), 1000);
+  if(client.voiceConnections.first()){
+    client.voiceConnections.first().disconnect();
   } else {
-    if (client.voiceConnections.first()){
-      client.voiceConnections.first().disconnect();
-    }
+    msg.reply("Nothing to disconnect from.");
   }
+  queue = [];
+}
+
+
+function queueRemove(){
+  queue.splice(0,1);
+  names.splice(0,1);
+}
+
+function queueRemoveAt(pos, msg, client){
+  queue.splice((pos-1),1);
+  names.splice((pos-1),1);
+}
+
+function pushNames(name){
+  var namesLen = names.push(name);
+  return namesLen;
+}
+
+function pushQueue(link){
+  var queueLen = queue.push(link);
+  return queueLen;
+}
+
+function youtubeSkip(msg, client){
+  msg.reply(`\`\`\`css\nSkipping: \'${names[0]}\'\`\`\``);
+  dispatcher.end();
+}
+
+function viewQueue(msg, client){
+  if (names.length == 0){
+    msg.reply("There is nothing in queue.");
+    return;
+  }
+  var queueReply = ``
+  queueReply += "Playing Now =>" + names[0] + "\n";
+  for (var x = 1; x < names.length; x++){
+    queueReply += ((x)+": \'"+names[x]+"\'\n")
+  }
+  msg.reply(`\`\`\`css\n${queueReply}\`\`\``);
+}
+
+function queueDeleteAt(content, msg, client){
+  var p = parseInt(content);
+  if (queue.length == 0){
+    msg.reply("Nothing in queue to delete!");
+  }
+  if (p > queue.length){
+    msg.reply("Not a valid queue position.");
+  } else {
+    msg.reply(`Removed ${names[p]} from queue.`);
+    queueRemoveAt(p, msg, client)
+  }
+}
+
+function queueMoveToFront(content, msg, client){
+  var m = parseInt(content);
+  if (queue.length == 0){
+    msg.reply("Nothing in queue to move forward!");
+  }
+  if (m > queue.length){
+    msg.reply("Not a valid queue position.");
+  } else (
+    msg.reply(`Moved ${names[m-1]} to the front of the queue.`);
+    queue.splice(0,0,queue.splice(m-1,1));
+    names.splice(0,0,names.splice(m-1,1));
+  )
 }
 
 module.exports = {
   search : search,
   disconn : disconn,
   vol : vol,
-  volumeReport: volumeReport
+  volumeReport : volumeReport,
+  viewQueue : viewQueue,
+  youtubeSkip : youtubeSkip,
+  queueDeleteAt : queueDeleteAt,
+  queueMoveToFront : queueMoveToFront
 }
