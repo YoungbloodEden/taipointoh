@@ -9,8 +9,9 @@ function help(msg, client){
 [help:] The command you're using now.\n
 [yt:] Command for searching youtube for a video. Anything following the command will be treated as a search string. From there, you can choose which video fits your search from a list of results.\n
 [queue:] Command to see what's in queue to play via YouTube.\n
-[qdel:] Takes a queue positon (number) to remove from the current queue. \n
-[skip:] Skips the currently playing song.
+[qdel:] Takes a queue position (number) to remove from the current queue. \n
+[qjump:] Takes a queue position (number) to jump to the front of the queue.\n
+[skip:] Skips the currently playing song.\n
 [volume:] Command to set the volume for playback. Takes whole numbers between 1 and 100\n
 [disc:] Command to force a disconnect from any voice channel.\n
 \`\`\``);
