@@ -22,7 +22,8 @@ function commandCheck(content, cmd, msg, client){
 
     case "volume":
       content.splice(0,1);
-      if (content.length < 2){
+      console.log(content.length);
+      if (content.length < 1){
         youTube.volumeReport(msg, client);
         return;
       } else {

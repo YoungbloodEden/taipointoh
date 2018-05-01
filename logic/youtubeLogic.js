@@ -7,7 +7,6 @@ var ytdl    = require('ytdl-core'),
 var streamOptions = { seek: 0, volume: 1 };
 
 function vol(content, msg, client){
-  console.log("vol is being called!")
   var v = parseInt(content);
   if (v > 100){
     msg.channel.send("I can't put the volume that high! (1-100)");
