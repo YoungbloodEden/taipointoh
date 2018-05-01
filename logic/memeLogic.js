@@ -26,7 +26,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/excited.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -36,7 +36,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/fakenews.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -46,7 +46,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/hcthtm.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -56,7 +56,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/garaaaage.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -66,7 +66,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/fullthing.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -76,7 +76,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/nicememe.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
@@ -86,7 +86,7 @@ function acceptResponse(msg, client){
           message.member.voiceChannel.join()
           .then(connection => {
             disp = connection.playFile(".sounds/yesyes.mp3");
-            disp.on('end', endmsg = >{
+            disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
           })
