@@ -12,6 +12,9 @@ var streamOptions = { seek: 0, volume: 1 },
 
 function vol(content, msg, client){
   var v = parseInt(content);
+  if (v === 667){
+    msg.channel.send("weak3n camp solo lane, weak3n numbah waannnn !")
+  }
   if (v > 100){
     msg.channel.send("I can't put the volume that high! (1-100)");
   } else if (v < 1){
