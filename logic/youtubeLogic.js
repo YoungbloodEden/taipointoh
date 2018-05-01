@@ -4,7 +4,8 @@ var ytdl    = require('ytdl-core'),
     Discord = require ('discord.js');
 
 
-var streamOptions = { seek: 0, volume: 1 };
+var streamOptions = { seek: 0, volume: 1 },
+    dispatcher;
 
 function vol(content, msg, client){
   var v = parseInt(content);
@@ -15,6 +16,9 @@ function vol(content, msg, client){
   } else if (v >= 1 && v <= 100){
     v = parseFloat((v/100).toFixed(2));
     streamOptions.volume = v;
+    if (dispatcher.volume){
+      dispatcher.setVolume(v);
+    }
     msg.channel.send("Volume has been set to " + (v*100) + "%");
     console.log(streamOptions);
   } else {
@@ -23,7 +27,7 @@ function vol(content, msg, client){
 }
 
 function volumeReport(msg, client){
-  msg.channel.send("The volume is currently set to: " + (parseFloat(streamOptions.volume)*100) + "%")
+  msg.channel.send("Volume: " + (parseFloat(streamOptions.volume)*100) + "%")
 }
 
 function search(args, msg, client){
@@ -84,7 +88,8 @@ function playback(msg, link, client){
 
   msg.member.voiceChannel.join()
   .then(connection => {
-    const dispatcher = connection.playStream(stream, streamOptions);
+    dispatcher = connection.playStream(stream, streamOptions);
+    console.log(dispatcher.volume, "volllllume");
     dispatcher.on('end', endmsg => {
       disconn(msg, client, connection);
     })
