@@ -6,7 +6,8 @@ var ytdl    = require('ytdl-core'),
 
 var streamOptions = { seek: 0, volume: 1 };
 
-function volume(content, msg, client){
+function vol(content, msg, client){
+  console.log("vol is being called!")
   var v = parseInt(content);
   if (v > 100){
     msg.channel.send("I can't put the volume that high! (1-100)");
@@ -20,6 +21,10 @@ function volume(content, msg, client){
   } else {
     msg.channel.send("That's not a valid volume! (1-100)");
   }
+}
+
+function volumeReport(msg, client){
+  msg.channel.send("The volume is currently set to: " + (parseFloat(streamOptions.volume)*100) + "%")
 }
 
 function search(args, msg, client){
@@ -104,5 +109,6 @@ function disconn(msg, client, connection){
 module.exports = {
   search : search,
   disconn : disconn,
-  volume: volume
+  vol : vol,
+  volumeReport: volumeReport
 }

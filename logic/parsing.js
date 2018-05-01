@@ -1,15 +1,8 @@
 var config  = require('../config.json');
 var youTube = require('./youtubeLogic.js');
+var miscLog = require('./miscLogic.js');
 
 var message, command;
-
-
-var keys = {
-  yt : "yt",
-  volume : "volume"
-}
-
-var keysLength = (Object.keys(keys).length);
 
 function prefixCheck(msg, client){
   message = msg.content.split(" ");
@@ -25,14 +18,26 @@ function commandCheck(content, cmd, msg, client){
       content.splice(0,1);
       content = content.join(' ');
       youTube.search(content, msg, client);
-      break;
+    break;
+
     case "volume":
       content.splice(0,1);
-      content = content.join('');
-      youTube.volume(content, msg, client);
-      break;
+      if (content.length < 2){
+        youTube.volumeReport(msg, client);
+        return;
+      } else {
+        content = content.join('');
+        youTube.vol(content, msg, client);
+      }
+    break;
+
+    case "help":
+      miscLog.help(msg, client);
+    break;
+
     default:
-      break;
+    break;
+
   }
 }
 
