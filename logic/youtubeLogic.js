@@ -4,7 +4,7 @@ var ytdl    = require ('ytdl-core'),
     Discord = require ('discord.js'),
     parsing = require ('./parsing.js'),
     fs      = require ('fs'),
-    qStuff  = require ('../tmp/queue.json');
+    qStuff  = require ('../storage/queue.json');
 
 
 var streamOptions = { seek: 0, volume: .5 },
