@@ -68,6 +68,14 @@ function commandCheck(content, cmd, msg, client){
       memeLog.menu(msg, client);
     break;
 
+    case "qsave":
+      youTube.qsave(msg, client);
+    break;
+
+    case "qget":
+      youTube.qget(msg, client);
+    break;
+
     default:
     break;
 

@@ -11,7 +11,6 @@ botclient.on('ready', () => {
 });
 
 botclient.on('message', msg => {
-  // console.log(msg.author);
   if (msg.author == botclient.user){
     return;
   }

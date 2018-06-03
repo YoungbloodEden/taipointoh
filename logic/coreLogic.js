@@ -9,7 +9,6 @@ function core(msg, client){
   if (msg.content == `${config.nfo.prefix}disc`){
     if (client.voiceConnections){
       youTube.disconn(msg, client);
-      console.log("Disconnected due to disc command");
     }
   } else {
     parse.prefixCheck(msg, client);

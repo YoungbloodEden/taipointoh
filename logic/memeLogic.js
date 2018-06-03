@@ -29,8 +29,7 @@ function acceptResponse(msg, client){
             disp = connection.playFile(".sounds/excited.mp3", youtubeLogic.streamOptions);
             setTimeout(function(){
               msg.member.voiceChannel.leave();}, 3000);
-            });
-          })
+          });
         break;
 
         case '2':

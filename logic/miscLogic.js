@@ -11,6 +11,8 @@ function help(msg, client){
 [queue:] Command to see what's in queue to play via YouTube.\n
 [qdel:] Takes a queue position (number) to remove from the current queue. \n
 [qjump:] Takes a queue position (number) to jump to the front of the queue.\n
+[qsave:] Command to save the current YouTube queue. \n
+[qget:] Command to retrieve the saved YouTube queue. \n
 [skip:] Skips the currently playing song.\n
 [volume:] Command to set the volume for playback. Takes whole numbers between 1 and 100\n
 [disc:] Command to force a disconnect from any voice channel.\n
