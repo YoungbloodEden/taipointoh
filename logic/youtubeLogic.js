@@ -1,17 +1,26 @@
-var ytdl    = require('ytdl-core'),
+var ytdl    = require ('ytdl-core'),
     request = require ('request'),
     config  = require ('../config.json'),
-    Discord = require ('discord.js');
+    Discord = require ('discord.js'),
+    parsing = require ('./parsing.js'),
+    fs      = require ('fs'),
+    qStuff  = require ('../tmp/queue.json');
 
 
-var streamOptions = { seek: 0, volume: 1 },
-    dispatcher,
+var streamOptions = { seek: 0, volume: .5 },
+    dispatcher = {},
     queue = [],
     names = [],
     streamComplete = true;
+    dispatcher.destroyed = true;
+
+var toSave;
 
 function vol(content, msg, client){
   var v = parseInt(content);
+  if (v === 667){
+    msg.channel.send("weak3n camp solo lane, weak3n numbah waannnn !")
+  }
   if (v > 100){
     msg.channel.send("I can't put the volume that high! (1-100)");
   } else if (v < 1){
@@ -122,12 +131,26 @@ function playback(msg, client){
 }
 
 function disconn(msg, client, connection){
-  if(client.voiceConnections.first()){
-    client.voiceConnections.first().disconnect();
+  if(queue.length >= 2){
+    msg.reply("You have a currently active queue. Disconnecting will clear it, are you sure you want to do this? (Y to confirm)");
+    resCollector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {maxMatches: 1, time: 10000});
+    resCollector.on('collect', collected => {
+      var resContent = collected.content.toLowerCase();
+      if (resContent == "y" || resContent == "yes" || resContent == "ye"){
+        queue = [];
+        names = [];
+        if(client.voiceConnections.first()){
+          client.voiceConnections.first().disconnect();
+        } else {
+          msg.reply("Nothing to disconnect from.");
+        }
+      } else {
+        msg.reply("Cancelling disconnect!");
+      }
+    })
   } else {
-    msg.reply("Nothing to disconnect from.");
+    msg.reply("Cancelling disconnect!");
   }
-  queue = [];
 }
 
 
@@ -196,6 +219,87 @@ function queueMoveToFront(content, msg, client){
   }
 }
 
+function clearConfirmation(msg, client){
+
+}
+
+function qsave(msg, client){
+  if (queue.length > 0){
+    queueParse();
+    fs.writeFile('./tmp/queue.json', `{"queueStuff": { "names": [${toSave.queueStuff.names}], "queue": [${toSave.queueStuff.links}]}}`, function(err){
+      if (err){
+        console.log(err)
+      } else {
+        msg.channel.send(`Queue saved! Retrieve it with \`${config.nfo.prefix}qget\`!`);
+      }
+    });
+  } else {
+    msg.channel.send("There is no queue to save!");
+  }
+}
+
+function queueParse(){
+  toSave = {};
+  toSave = {"queueStuff": {
+    "names" : names,
+    "links" : queue
+  }};
+  for(var i = 0; i < queue.length; i++){
+    if(toSave.queueStuff.links[i].charAt(0) == "\""){
+      continue;
+    }
+      toSave.queueStuff.names[i] = "\"" + toSave.queueStuff.names[i] + "\"";
+      toSave.queueStuff.links[i] = "\"" + toSave.queueStuff.links[i] + "\"";
+  }
+}
+
+function qget(msg, client){
+  if (queue.length >= 2){
+    msg.reply("You have a currently active queue. Grabbing a saved queue will clear it, are you sure you want to do this? (Y to confirm)");
+    resCollector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, {maxMatches: 1, time: 10000});
+    resCollector.on('collect', collected => {
+      var resContent = collected.content.toLowerCase();
+      if (resContent == "y" || resContent == "yes" || resContent == "ye"){
+        if (dispatcher.destroyed == false){
+          queue = [queue[0]];
+          names = [names[0]];
+          for (var j = 0; j < qStuff.queueStuff.queue.length; j++){
+            queue.push(qStuff.queueStuff.queue[j].replace(/\"/g, ""));
+            names.push(qStuff.queueStuff.names[j].replace(/\"/g, ""));
+          }
+        } else {
+          for (var j = 0; j < qStuff.queueStuff.queue.length; j++){
+            queue.push(qStuff.queueStuff.queue[j].replace(/\"/g, ""));
+            names.push(qStuff.queueStuff.names[j].replace(/\"/g, ""));
+          }
+          playback(msg, client);
+        }
+        msg.reply("Queue cleared, new queue grabbed, maintaining current play if applicable.")
+      } else {
+        msg.reply("Cancelling grab!");
+        return;
+      }
+    })
+  } else {
+    msg.reply("Grabbing new queue, maintaining current play if applicable.");
+    if (dispatcher.destroyed == false){
+      queue = [queue[0]];
+      names = [names[0]];
+      for (var j = 0; j < qStuff.queueStuff.queue.length; j++){
+        queue.push(qStuff.queueStuff.queue[j].replace(/\"/g, ""));
+        names.push(qStuff.queueStuff.names[j].replace(/\"/g, ""));
+      }
+    } else {
+      for (var j = 0; j < qStuff.queueStuff.queue.length; j++){
+        queue.push(qStuff.queueStuff.queue[j].replace(/\"/g, ""));
+        names.push(qStuff.queueStuff.names[j].replace(/\"/g, ""));
+      }
+      playback(msg, client);
+    }
+  }
+}
+
+
 module.exports = {
   search : search,
   disconn : disconn,
@@ -204,5 +308,7 @@ module.exports = {
   viewQueue : viewQueue,
   youtubeSkip : youtubeSkip,
   queueDeleteAt : queueDeleteAt,
-  queueMoveToFront : queueMoveToFront
+  queueMoveToFront : queueMoveToFront,
+  qsave : qsave,
+  qget : qget,
 }

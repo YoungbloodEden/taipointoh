@@ -1,6 +1,7 @@
 var config  = require('../config.json');
 var youTube = require('./youtubeLogic.js');
 var miscLog = require('./miscLogic.js');
+var memeLog = require('./memeLogic.js');
 
 var message, command;
 
@@ -45,23 +46,35 @@ function commandCheck(content, cmd, msg, client){
     break;
 
     case "qdel":
-    content.splice(0,1);
-    if (content.length < 1){
-      msg.reply("Choose a song to remove by its queue position.");
-    } else {
-      content = content.join('');
-      youTube.queueDeleteAt(content, msg, client);
-    }
+      content.splice(0,1);
+      if (content.length < 1){
+        msg.reply("Choose a song to remove by its queue position.");
+      } else {
+        content = content.join('');
+        youTube.queueDeleteAt(content, msg, client);
+      }
     break;
 
     case "qjump":
-    content.splice(0,1);
-    if(content.length < 1){
-      msg.reply("Choose a song to jump forward by its queue position.");
-    } else {
-      content = content.join('');
-      youTube.queueMoveToFront(content, msg, client);
-    }
+      content.splice(0,1);
+      if(content.length < 1){
+        msg.reply("Choose a song to jump forward by its queue position.");
+      } else {
+        content = content.join('');
+        youTube.queueMoveToFront(content, msg, client);
+      }
+
+    case "meme":
+      memeLog.menu(msg, client);
+    break;
+
+    case "qsave":
+      youTube.qsave(msg, client);
+    break;
+
+    case "qget":
+      youTube.qget(msg, client);
+    break;
 
     default:
     break;
@@ -69,6 +82,7 @@ function commandCheck(content, cmd, msg, client){
   }
 }
 
+
 module.exports = {
-  prefixCheck : prefixCheck
+  prefixCheck : prefixCheck,
 }

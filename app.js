@@ -3,8 +3,6 @@ var Discord = require('discord.js'),
     core    = require('./logic/coreLogic.js');
 
 
-var himself = false;
-
 
 const botclient = new Discord.Client();
 botclient.on('ready', () => {
@@ -13,14 +11,7 @@ botclient.on('ready', () => {
 });
 
 botclient.on('message', msg => {
-  // console.log(msg.author);
   if (msg.author == botclient.user){
-    himself = true;
-  } else {
-    himself = false;
-  }
-  if (himself){
-    console.log("Ignoring my own messages.");
     return;
   }
   core.core(msg, botclient);
