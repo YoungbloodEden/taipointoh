@@ -1,6 +1,6 @@
 var disp;
 var Discord = require('discord.js');
-
+var youtubeLogic = require('./youtubeLogic.js');
 
 function menu(msg, client){
   msg.reply(`Here's the meme menu, make a choice!\n
@@ -26,17 +26,17 @@ function acceptResponse(msg, client){
         case '1':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/excited.mp3");
-            disp.on('end', endmsg => {
-              client.voiceConnections.first().disconnect();
-            })
+            disp = connection.playFile(".sounds/excited.mp3", youtubeLogic.streamOptions);
+            setTimeout(function(){
+              msg.member.voiceChannel.leave();}, 3000);
+            });
           })
         break;
 
         case '2':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/fakenews.mp3");
+            disp = connection.playFile(".sounds/fakenews.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
@@ -46,7 +46,7 @@ function acceptResponse(msg, client){
         case '3':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/hcthtm.mp3");
+            disp = connection.playFile(".sounds/hcthtm.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
@@ -56,7 +56,7 @@ function acceptResponse(msg, client){
         case '4':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/garaaaage.mp3");
+            disp = connection.playFile(".sounds/garaaaage.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
@@ -66,7 +66,7 @@ function acceptResponse(msg, client){
         case '5':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/fullthing.mp3");
+            disp = connection.playFile(".sounds/fullthing.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
@@ -76,7 +76,7 @@ function acceptResponse(msg, client){
         case '6':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/nicememe.mp3");
+            disp = connection.playFile(".sounds/nicememe.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
@@ -86,7 +86,7 @@ function acceptResponse(msg, client){
         case '7':
           message.member.voiceChannel.join()
           .then(connection => {
-            disp = connection.playFile(".sounds/yesyes.mp3");
+            disp = connection.playFile(".sounds/yesyes.mp3", youtubeLogic.streamOptions);
             disp.on('end', endmsg => {
               client.voiceConnections.first().disconnect();
             })
