@@ -226,7 +226,7 @@ function clearConfirmation(msg, client){
 function qsave(msg, client){
   if (queue.length > 0){
     queueParse();
-    fs.writeFile('./tmp/queue.json', `{"queueStuff": { "names": [${toSave.queueStuff.names}], "queue": [${toSave.queueStuff.links}]}}`, function(err){
+    fs.writeFile('./storage/queue.json', `{"queueStuff": { "names": [${toSave.queueStuff.names}], "queue": [${toSave.queueStuff.links}]}}`, function(err){
       if (err){
         console.log(err)
       } else {
