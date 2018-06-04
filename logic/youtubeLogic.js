@@ -149,7 +149,11 @@ function disconn(msg, client, connection){
       }
     })
   } else {
-    msg.reply("Cancelling disconnect!");
+    if(client.voiceConnections.first()){
+      client.voiceConnections.first().disconnect();
+    } else {
+      msg.reply("Nothing to disconnect from.");
+    }
   }
 }
 
