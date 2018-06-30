@@ -87,7 +87,7 @@ function commandCheck(content, cmd, msg, client){
 }
 
 function xd(msg, client){
-  msg.member.voiceChannel.join();
+  msg.member.voiceChannel.join()
   .then(connection => {
     connection.playFile('./ecksdee.mp3', {volume: 1});
     connection.on('end', endmsg => {
