@@ -94,6 +94,7 @@ function xd(msg, client){
       msg.member.voiceChannel.leave();
     })
   })
+  .catch(console.error);
 }
 
 module.exports = {
