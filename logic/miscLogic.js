@@ -8,6 +8,7 @@ function help(msg, client){
   `\`\`\`css\n
 [help:] The command you're using now.\n
 [yt:] Command for searching youtube for a video. Anything following the command will be treated as a search string. From there, you can choose which video fits your search from a list of results.\n
+[vol:] or [volume:] Command for changing the volume of Tai's playback. Takes a number between 1 and 100, rounded down.\n
 [queue:] Command to see what's in queue to play via YouTube.\n
 [qdel:] Takes a queue position (number) to remove from the current queue. \n
 [qjump:] Takes a queue position (number) to jump to the front of the queue.\n
