@@ -33,6 +33,18 @@ function commandCheck(content, cmd, msg, client){
       }
     break;
 
+    case "vol":
+      content.splice(0,1);
+      console.log(content.length);
+      if (content.length < 1){
+        youTube.volumeReport(msg, client);
+        return;
+      } else {
+        content = content.join('');
+        youTube.vol(content, msg, client);
+      }
+    break;
+
     case "queue":
       youTube.viewQueue(msg, client);
     break;

@@ -4,7 +4,7 @@ var ytdl    = require ('ytdl-core'),
     Discord = require ('discord.js'),
     parsing = require ('./parsing.js'),
     fs      = require ('fs'),
-    qStuff  = require ('../tmp/queue.json');
+    qStuff  = require ('../storage/queue.json');
 
 
 var streamOptions = { seek: 0, volume: .5 },
@@ -149,7 +149,11 @@ function disconn(msg, client, connection){
       }
     })
   } else {
-    msg.reply("Cancelling disconnect!");
+    if(client.voiceConnections.first()){
+      client.voiceConnections.first().disconnect();
+    } else {
+      msg.reply("Nothing to disconnect from.");
+    }
   }
 }
 
@@ -226,7 +230,7 @@ function clearConfirmation(msg, client){
 function qsave(msg, client){
   if (queue.length > 0){
     queueParse();
-    fs.writeFile('./tmp/queue.json', `{"queueStuff": { "names": [${toSave.queueStuff.names}], "queue": [${toSave.queueStuff.links}]}}`, function(err){
+    fs.writeFile('./storage/queue.json', `{"queueStuff": { "names": [${toSave.queueStuff.names}], "queue": [${toSave.queueStuff.links}]}}`, function(err){
       if (err){
         console.log(err)
       } else {

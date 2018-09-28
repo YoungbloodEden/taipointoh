@@ -14,7 +14,7 @@ function help(msg, client){
 [qsave:] Command to save the current YouTube queue. \n
 [qget:] Command to retrieve the saved YouTube queue. \n
 [skip:] Skips the currently playing song.\n
-[volume:] Command to set the volume for playback. Takes whole numbers between 1 and 100\n
+[volume:] or [vol:] Command to set the volume for playback. Takes a number between 1 and 100, rounded down.\n
 [disc:] Command to force a disconnect from any voice channel.\n
 \`\`\``);
 }
