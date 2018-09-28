@@ -88,26 +88,12 @@ function commandCheck(content, cmd, msg, client){
       youTube.qget(msg, client);
     break;
 
-    case "xd":
-      xd(msg, client);
-    break;
-
     default:
     break;
 
   }
 }
 
-function xd(msg, client){
-  msg.member.voiceChannel.join()
-  .then(connection => {
-    connection.playFile('./ecksdee.mp3', {volume: 1});
-    connection.on('end', endmsg => {
-      msg.member.voiceChannel.leave();
-    })
-  })
-  .catch(console.error);
-}
 
 module.exports = {
   prefixCheck : prefixCheck,
