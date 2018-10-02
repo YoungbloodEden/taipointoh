@@ -16,7 +16,7 @@ botclient.on('message', msg => {
     return;
   }
   core.core(msg, botclient);
-  console.log(client.broadcasts);
+  console.log(botclient.broadcasts);
 })
 
 botclient.login(config.nfo.token);
