@@ -1,6 +1,7 @@
-var Discord = require('discord.js'),
-    config  = require('./config.json'),
-    core    = require('./logic/coreLogic.js');
+const Discord  = require('discord.js'),
+      config   = require('./config.json'),
+      core     = require('./logic/coreLogic.js'),
+      mongoose = require ('mongoose');
 
 
 
@@ -15,6 +16,7 @@ botclient.on('message', msg => {
     return;
   }
   core.core(msg, botclient);
+  console.log(client.broadcasts);
 })
 
 botclient.login(config.nfo.token);
