@@ -16,7 +16,8 @@ botclient.on('message', msg => {
     return;
   }
   core.core(msg, botclient);
-  console.log(botclient.broadcasts);
+  console.log(botclient.voiceConnections);
+  console.log(botclient.users);
 })
 
 botclient.login(config.nfo.token);
