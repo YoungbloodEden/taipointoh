@@ -26,9 +26,9 @@ botclient.on('message', msg => {
     return;
   }
   core.core(msg, botclient);
-  console.log(botclient.voiceConnections);
-  // var command = new Command({ command: msg.content, user: msg.author, gop: msg.guild});
-  // console.log(command.user);
+  console.log(botclient.voiceConnections[1])
+  var command = new Command({ command: msg.content, user: msg.author, gop: msg.guild});
+  console.log(command.user);
   // msg.reply(" "+command.user.id+command.user.avatar+command.user.username+command.user.bot+" ");
 })
 
