@@ -4,15 +4,18 @@
   "description": "Tai 2.0",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.3.2",
+    "discord.js": "^11.4.2",
     "erlpack": "^0.1.2",
     "fs": "0.0.1-security",
     "libsodium-wrappers": "^0.7.3",
-    "node-opus": "^0.2.7",
+    "mongodb": "^3.1.6",
+    "mongoose": "^5.3.1",
+    "node-gyp": "^3.8.0",
+    "opusscript": "0.0.6",
     "pg": "^7.4.3",
-    "request": "^2.85.0",
+    "request": "^2.88.0",
     "uws": "^9.148.0",
-    "ytdl-core": "^0.20.2"
+    "ytdl-core": "^0.20.4"
   },
   "devDependencies": {},
   "scripts": {
